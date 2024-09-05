@@ -1,0 +1,7 @@
+10 input a
+11 input b
+12 input c
+13 let a >= b - c
+14
+13
+123

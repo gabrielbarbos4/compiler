@@ -1,4 +1,5 @@
-const { abc, abc2 } = require('./lexical')
+const lexical = require('./lexical');
+const fs = require('fs')
+const fileContents = fs.readFileSync(`src/resources/code.txt`).toString();
 
-abc();
-abc2();
+lexical.analyze(fileContents);
