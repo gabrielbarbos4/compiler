@@ -63,11 +63,19 @@ const analyze = (fileString) => {
       let finalOperator = character;
       const nextChar = fileString.charAt(currentIndex + 1);
 
-      if(isOperator(nextChar)) {
-        finalOperator += nextChar;
-        currentIndex += 2;
-      } else if(!isIgnore(nextChar)) {
-        throw new Error(`Caracter invalido apos operador: ${nextChar}`)
+      if(character === "-") {
+        let validChar = nextChar === " " || nextChar === "1";
+
+        if(!validChar) {
+          throw new Error(`Caracter invalido a frente do sinal ${character}: ${nextChar === " "}`)
+        }
+      } else {
+        if(isOperator(nextChar)) {
+          finalOperator += nextChar;
+          currentIndex += 2;
+        } else if(!isIgnore(nextChar)) {
+          throw new Error(`Caracter invalido apos operador: ${nextChar}`)
+        }
       }
 
       TOKENS.add({ type: "operator", value: finalOperator });
@@ -102,7 +110,6 @@ const analyze = (fileString) => {
 }
 
 const isAction = (character, fileString, currentIndex) => {
-  // TODO validar REM
   let possibleAction;
 
   if(character === "i") {
@@ -130,6 +137,18 @@ const isAction = (character, fileString, currentIndex) => {
   }
 
   walkedIndexCounter++;
+
+  if(moutedWord === "rem") {
+    let currentIndexAux = walkedIndexCounter;
+
+    let nextChar = fileString.charAt(currentIndexAux);
+
+    while(nextChar !== "\n") {
+      currentIndexAux++;
+      walkedIndexCounter++;
+      nextChar = fileString.charAt(currentIndexAux);
+    }
+  }
 
   const nextChar = fileString.charAt(currentIndex + 1);
 
