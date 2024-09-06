@@ -152,8 +152,10 @@ const isAction = (character, fileString, currentIndex) => {
 
   const nextChar = fileString.charAt(currentIndex + 1);
 
-  if(moutedWord !== possibleAction.value || !isIgnore(nextChar)) 
-    throw new Error(`Acao nao presente na gramatica ${nextChar}`)
+  //TODO validar final do arquivo
+
+  if(moutedWord !== possibleAction.value || !isIgnore(nextChar))
+    throw new Error(`Acao nao presente na gramatica ${character} - ${moutedWord}`)
 
   return {
     walkedIndexCounter,
