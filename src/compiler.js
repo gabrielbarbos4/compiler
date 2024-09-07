@@ -7,6 +7,7 @@ const syntactic = require('./syntactic');
 const semantic = require('./semantic');
 
 const tokens = lexical.analyze(fileContents);
+console.log("Lexical  analysis: ", tokens && tokens.size > 0 ? `Success` : `Failure`);
 
 const syntacticResult = syntactic.analyze(tokens);
 console.log("Syntactic  analysis: ", syntacticResult ? `Success` : `Failure`);
