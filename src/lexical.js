@@ -34,7 +34,13 @@ const analyze = (fileString) => {
     const character = fileString.charAt(currentIndex);
     let validated = false;
 
-    if(isIgnore(character)) {
+    if(character === "\n") {
+      TOKENS.add({ type: "action", value: "\n" });
+      currentIndex++;
+      validated = true;
+    }
+
+    if(!validated && isIgnore(character)) {
       currentIndex++;
       validated = true;
     }
@@ -106,7 +112,7 @@ const analyze = (fileString) => {
       throw new Error(`fora da gramatica: ${character}, next: ${nextChar}`);
   }
 
-  TOKENS.forEach(token => console.log(token));
+  return TOKENS;
 }
 
 const isAction = (character, fileString, currentIndex) => {
