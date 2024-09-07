@@ -29,7 +29,6 @@ const analyze = (tokens) => {
       case "input": {
         if(!isType(tokensArray[++currentIndex], 'variable'))
           throw new Error("token nao e variavel a frente do input");
-
         currentIndex++;
         break;
       }
@@ -79,6 +78,8 @@ const analyze = (tokens) => {
       }
       case "goto": {
         let nextToken = tokensArray[++currentIndex]
+
+        //TODO verificar se a proxima variavel depois do integer e um \n e a seguinte tambem e um integer
 
         if(!isType(nextToken, 'integer'))
           throw new Error(`Token após goto não é um inteiro: ${nextToken.value}`);

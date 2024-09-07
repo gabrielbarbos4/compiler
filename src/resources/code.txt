@@ -15,5 +15,5 @@
 80 let c = x
 85 print a
 90 print b
-95 print c
-99 end
+95 print y
+100 end
