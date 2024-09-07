@@ -2,7 +2,6 @@
 
 const analyze = (tokens) => {
   const tokensArray = Array.from(tokens);
-
   let currentIndex = 0;
 
   if(!isType(tokensArray[currentIndex], 'integer'))
@@ -19,8 +18,6 @@ const analyze = (tokens) => {
     if(isType(actualToken, 'integer')) {
       currentIndex++;
     }
-
-    console.log(currentIndex, tokensArray.length)
 
     switch(actualToken.value) {
       case "\n":
@@ -39,9 +36,7 @@ const analyze = (tokens) => {
       case "let": {
         let nextToken = tokensArray[++currentIndex]
 
-        console.log("dentro do let")
-
-        if(!isVariable(nextToken))
+        if(!isType(nextToken, 'variable'))
           throw new Error("Token nao e uma variavel apos o let");
 
         nextToken = tokensArray[++currentIndex];
@@ -121,14 +116,6 @@ const analyze = (tokens) => {
 
 const isType = (token, type) => {
   return token.type === type;
-}
-
-const isVariable = (token) => {
-  return token.type === 'variable';
-}
-
-const isDigit = (character) => {
-  return /^\d+$/.test(character)
 }
 
 module.exports = { analyze }
