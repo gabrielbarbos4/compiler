@@ -7,7 +7,7 @@ const analyze = (tokens) => {
   if(!isType(tokensArray[currentIndex], 'integer'))
     throw new Error("Primeira Linha nao iniciada com digito");
 
-  currentIndex++
+  currentIndex++;
 
   while(currentIndex !== tokensArray.length - 1) {
     const actualToken = tokensArray[currentIndex];

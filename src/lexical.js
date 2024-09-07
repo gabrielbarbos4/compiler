@@ -117,7 +117,6 @@ const isAction = (character, fileString, currentIndex) => {
 
   if(moutedWord === "rem") {
     let currentIndexAux = walkedIndexCounter;
-
     let nextChar = fileString.charAt(currentIndexAux);
 
     while(nextChar !== "\n") {
@@ -127,13 +126,11 @@ const isAction = (character, fileString, currentIndex) => {
     }
   }
 
-  const nextChar = fileString.charAt(currentIndex + 1);
-
   if(moutedWord === "end") {
     return { walkedIndexCounter, moutedWord, isAction: true }
   }
 
-  if(moutedWord !== possibleAction.value || !isIgnore(nextChar))
+  if(moutedWord !== possibleAction.value || !isIgnore(fileString.charAt(currentIndex + 1)))
     throw new Error(`Acao nao presente na gramatica ${character} - ${moutedWord}`)
 
   return { walkedIndexCounter, moutedWord, isAction: true }
