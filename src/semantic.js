@@ -17,8 +17,6 @@ const analyze = (tokens) => {
       LINES.add(Number(actualToken.value));
     }
 
-    console.log(currentIndex)
-
     switch(actualToken.value) {
       case "input": {
         VARIABLES.add(tokensArray[++currentIndex].value);
@@ -26,13 +24,24 @@ const analyze = (tokens) => {
         currentIndex++;
         break;
       }
-      case "print":
+      case "print": {
+        const nextToken = tokensArray[++currentIndex];
+
+        if(isType(nextToken, 'variable') && !VARIABLES.has(nextToken.value))
+          throw new Error(`Variável não declarada: ${nextToken.value}`);
+
+        currentIndex++;
+        break;
+      }
       case "if": {
         let nextToken = tokensArray[++currentIndex];
 
         while(nextToken.value !== "\n") {
           if(isType(nextToken, 'variable') && !VARIABLES.has(nextToken.value))
             throw new Error(`Variável não declarada: ${nextToken.value}`);
+
+          if(nextToken.value === "goto")
+            GOTO_DECLARED_LINES.add(Number(tokensArray[currentIndex + 1].value))
 
           currentIndex++;
           nextToken = tokensArray[currentIndex];
@@ -62,7 +71,7 @@ const analyze = (tokens) => {
       case "goto": {
         const { value } = tokensArray[++currentIndex];
 
-        GOTO_DECLARED_LINES.add(value);
+        GOTO_DECLARED_LINES.add(Number(value));
 
         currentIndex++;
         break;
@@ -85,7 +94,6 @@ const analyze = (tokens) => {
 const validateLineOrder = () => {
   const linesArray = Array.from(LINES);
   const countPattern =  Math.abs(linesArray[0] - linesArray[1]);
-  console.log(linesArray)
 
   for(let i = 0; i < linesArray.length - 1; i++) {
     if(linesArray[i + 1] < linesArray[i])
@@ -101,7 +109,7 @@ const validateGotoDeclarations = () => {
 
   declarationsArray.forEach(declaration => {
     if(!LINES.has(declaration))
-      throw new Error(`Linha inexistente para declaraçãoo de GOTO: ${declaration}`)
+      throw new Error(`Linha inexistente para declaração de GOTO: ${declaration}`)
   });
 }
 

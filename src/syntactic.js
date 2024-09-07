@@ -4,6 +4,9 @@ const analyze = (tokens) => {
   const tokensArray = Array.from(tokens);
   let currentIndex = 0;
 
+  if(tokensArray[tokensArray.length - 1].value !== "end")
+    throw new Error("Último token não é 'end'");
+
   if(!isType(tokensArray[currentIndex], 'integer'))
     throw new Error("Primeira Linha nao iniciada com digito");
 
@@ -41,7 +44,7 @@ const analyze = (tokens) => {
         nextToken = tokensArray[++currentIndex];
 
         if(nextToken.value !== "=")
-          throw new Error("Token nao e um '=' apos a variavel");
+          throw new Error("Token não é um '=' após a variável");
 
         let pairAuxArray = [];
 
@@ -54,13 +57,21 @@ const analyze = (tokens) => {
 
         for(let i = 0; i < pairAuxArray.length; i += 2) {
           if(pairAuxArray[i + 1].value === "-") {
-            if(pairAuxArray[i + 2].value != "1")
+            if(pairAuxArray[i + 2].value !== "1")
               throw new Error("Pilha de tokens invalida para operacao let com operador negativo")
 
             i++;
           } else {
-            if(!(isType(pairAuxArray[i], 'operator') && (isType(pairAuxArray[i + 1], 'variable') || isType(pairAuxArray[i + 1], 'integer'))))
-              throw new Error("Pilha de tokens invalida para operacao let")
+            const isOperator = isType(pairAuxArray[i], 'operator');
+            let isArithmeticOperator = isArithmeticOperators(pairAuxArray[i].value);
+
+            // ignore =
+            if(i === 0) {
+              isArithmeticOperator = true;
+            }
+
+            if(!(isOperator && isArithmeticOperator && (isType(pairAuxArray[i + 1], 'variable') || isType(pairAuxArray[i + 1], 'integer'))))
+              throw new Error(`Pilha de tokens inválida para operacao let: valores analisados ${pairAuxArray[i].value} | ${pairAuxArray[i + 1].value}`)
           }
         }
 
@@ -77,14 +88,16 @@ const analyze = (tokens) => {
         break;
       }
       case "goto": {
-        let nextToken = tokensArray[++currentIndex]
-
-        //TODO verificar se a proxima variavel depois do integer e um \n e a seguinte tambem e um integer
+        let nextToken = tokensArray[++currentIndex];
 
         if(!isType(nextToken, 'integer'))
           throw new Error(`Token após goto não é um inteiro: ${nextToken.value}`);
 
-        currentIndex++;
+        nextToken = tokensArray[++currentIndex]
+
+        if(nextToken.value !== "\n")
+          throw new Error(`Token após declaração de goto não é um '\\n': ${nextToken.value}`);
+
         break;
       }
       case "if": {
@@ -113,6 +126,14 @@ const analyze = (tokens) => {
   }
 
   return true;
+}
+
+const isArithmeticOperators = (value) => {
+  return value === "-"
+    || value === "+"
+    || value === "*"
+    || value === "/"
+    || value === "%"
 }
 
 const isType = (token, type) => {

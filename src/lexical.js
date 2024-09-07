@@ -53,6 +53,11 @@ const analyze = (fileString) => {
         }
       } else {
         if(isOperator(nextChar)) {
+          const nextCharNextDoubleOperator = fileString.charAt(currentIndex + 2);
+
+          if(!isIgnore(nextCharNextDoubleOperator))
+            throw new Error(`Caracter inválido após operador: ${finalOperator += nextChar} | caracter: ${nextChar}`)
+
           finalOperator += nextChar;
           currentIndex += 2;
         } else if(!isIgnore(nextChar)) {
@@ -85,7 +90,7 @@ const analyze = (fileString) => {
     }
 
     if(!validated) 
-      throw new Error(`fora da gramatica: ${character}, next: ${nextChar}`);
+      throw new Error(`Não validado: ${character}, next: ${nextChar}`);
   }
 
   return TOKENS;
@@ -131,7 +136,7 @@ const isAction = (character, fileString, currentIndex) => {
   }
 
   if(moutedWord !== possibleAction.value || !isIgnore(fileString.charAt(currentIndex + 1)))
-    throw new Error(`Acao nao presente na gramatica ${character} - ${moutedWord}`)
+    throw new Error(`Ação não presente na gramatica ${character} - ${moutedWord}`)
 
   return { walkedIndexCounter, moutedWord, isAction: true }
 }

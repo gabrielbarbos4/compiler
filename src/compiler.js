@@ -3,14 +3,13 @@ const fs = require('fs')
 const fileContents = fs.readFileSync(`src/resources/code.txt`).toString();
 
 const lexical = require('./lexical');
-const sintatic = require('./sintatic');
+const syntactic = require('./syntactic');
 const semantic = require('./semantic');
 
 const tokens = lexical.analyze(fileContents);
-console.log(tokens);
 
-const sintaticResult = sintatic.analyze(tokens);
-console.log(sintaticResult);
+const syntacticResult = syntactic.analyze(tokens);
+console.log("Syntactic  analysis: ", syntacticResult ? `Success` : `Failure`);
 
 const semanticResult = semantic.analyze(tokens);
-console.log(semanticResult)
+console.log("Semantic  analysis: ", semanticResult ? `Success` : `Failure`);
