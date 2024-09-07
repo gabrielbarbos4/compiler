@@ -1,32 +1,8 @@
 "use strict"
 
-let currentIndex = 0;
+const { ACTIONS, OPERATORS, ignore_characters } = require("./gramatic");
 const TOKENS = new Set();
-const ignore_characters = [" ", "\t", "\r", "\n"];
-const OPERATORS = [
-  { name: "assignment", value: "=" },
-  { name: "add", value: "+" },
-  { name: "subtract", value: "-" },
-  { name: "multiply", value: "*" },
-  { name: "divide", value: "/" },
-  { name: "modulo", value: "%" },
-  { name: "eq", value: "==" },
-  { name: "ne", value: "!=" },
-  { name: "gt", value: ">" },
-  { name: "lt", value: "<" },
-  { name: "ge", value: ">=" },
-  { name: "le", value: "<=" },
-];
-const ACTIONS = [
-  { name: "rem", value: "rem" },
-  { name: "input", value: "input" },
-  { name: "let", value: "let" },
-  { name: "print", value: "print" },
-  { name: "goto", value: "goto" },
-  { name: "if", value: "if" },
-  { name: "enter", value: "\n" },
-  { name: "end", value: "end" }
-]
+let currentIndex = 0;
 
 const analyze = (fileString) => {
 
@@ -118,17 +94,12 @@ const analyze = (fileString) => {
 const isAction = (character, fileString, currentIndex) => {
   let possibleAction;
 
-  if(character === "i") {
-    possibleAction = ACTIONS.find(
-      action => action.value.charAt(0) === character
-      && action.value.charAt(1) === fileString.charAt(currentIndex + 1)
-    )
-  } else {
-    possibleAction = ACTIONS.find(action => action.value.charAt(0) === character)
-  }
 
-  if(!possibleAction) 
-    return { isAction: false }
+  possibleAction = character === "i"
+    ? ACTIONS.find(action => action.value.charAt(0) === character && action.value.charAt(1) === fileString.charAt(currentIndex + 1))
+    : ACTIONS.find(action => action.value.charAt(0) === character)
+
+  if(!possibleAction) return { isAction: false }
 
   let moutedWord = character;
   let walkedIndexCounter = 0;
@@ -158,16 +129,14 @@ const isAction = (character, fileString, currentIndex) => {
 
   const nextChar = fileString.charAt(currentIndex + 1);
 
-  //TODO validar final do arquivo
+  if(moutedWord === "end") {
+    return { walkedIndexCounter, moutedWord, isAction: true }
+  }
 
   if(moutedWord !== possibleAction.value || !isIgnore(nextChar))
     throw new Error(`Acao nao presente na gramatica ${character} - ${moutedWord}`)
 
-  return {
-    walkedIndexCounter,
-    moutedWord,
-    isAction: true
-  }
+  return { walkedIndexCounter, moutedWord, isAction: true }
 }
 
 const isOperator = (character) => {
