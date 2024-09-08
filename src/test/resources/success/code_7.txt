@@ -1,0 +1,11 @@
+10 input b
+15 input e
+20 if e < 0 goto 50
+25 let p = 1
+30 if e == 0 goto 55
+35 let p = p * b
+40 let e = e - 1
+45 goto 30
+50 let p = -1
+55 print p
+60 end

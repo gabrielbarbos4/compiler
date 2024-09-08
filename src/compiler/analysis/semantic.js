@@ -87,8 +87,6 @@ const analyze = (tokens) => {
 
   validateLineOrder(LINES);
   validateGotoDeclarations(GOTO_DECLARED_LINES, LINES);
-
-  return true;
 }
 
 const validateLineOrder = (lines) => {

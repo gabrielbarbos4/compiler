@@ -124,8 +124,6 @@ const analyze = (tokens) => {
       }
     }
   }
-
-  return true;
 }
 
 const isArithmeticOperators = (value) => {

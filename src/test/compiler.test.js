@@ -20,12 +20,12 @@ const fromFiles = (type) => {
 }
 
 describe("Compiler", () => {
-  test.each(fromFiles('failure'))('file name: $fileName', ({ content }) => {
+  test.each(fromFiles('failure'))('Should NOT compile file name: $fileName', ({ content }) => {
     // act - assert
     expect(() => { compile(content) }).toThrowError();
   });
 
-  test.each(fromFiles('success'))('file name: $fileName', ({ content }) => {
+  test.each(fromFiles('success'))('Should compile file name: $fileName', ({ content }) => {
     // act - assert
     expect(() => { compile(content) }).not.toThrowError();
   });

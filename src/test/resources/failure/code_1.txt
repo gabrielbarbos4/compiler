@@ -1,5 +1,5 @@
-10 input n
-15 if n > 0 goto 30
+10 input b
+15 if n => 0 goto 30
 20 let m = -1
 25 goto 65
 30 let s = 0
@@ -10,4 +10,4 @@
 55 goto 40
 60 let m = s / n
 65 print m
-70
+70 end

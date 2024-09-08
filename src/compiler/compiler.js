@@ -4,13 +4,9 @@ import * as semantic from './analysis/semantic.js'
 
 const compile = (fileContents) => {
   const tokens = lexical.analyze(fileContents);
-  console.log("Lexical  analysis: ", tokens && tokens.size > 0 ? `Success` : `Failure`);
 
-  const syntacticResult = syntactic.analyze(tokens);
-  console.log("Syntactic  analysis: ", syntacticResult ? `Success` : `Failure`);
-
-  const semanticResult = semantic.analyze(tokens);
-  console.log("Semantic  analysis: ", semanticResult ? `Success` : `Failure`);
+  syntactic.analyze(tokens);
+  semantic.analyze(tokens);
 }
 
 export { compile }
