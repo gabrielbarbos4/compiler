@@ -1,10 +1,10 @@
 "use strict"
 
-const LINES = new Set();
-const VARIABLES = new Set();
-const GOTO_DECLARED_LINES = new Set();
-
 const analyze = (tokens) => {
+  const LINES = new Set();
+  const VARIABLES = new Set();
+  const GOTO_DECLARED_LINES = new Set();
+
   const tokensArray = Array.from(tokens);
   let currentIndex = 0;
 
@@ -85,14 +85,14 @@ const analyze = (tokens) => {
     }
   }
 
-  validateLineOrder();
-  validateGotoDeclarations();
+  validateLineOrder(LINES);
+  validateGotoDeclarations(GOTO_DECLARED_LINES, LINES);
 
   return true;
 }
 
-const validateLineOrder = () => {
-  const linesArray = Array.from(LINES);
+const validateLineOrder = (lines) => {
+  const linesArray = Array.from(lines);
   const countPattern =  Math.abs(linesArray[0] - linesArray[1]);
 
   for(let i = 0; i < linesArray.length - 1; i++) {
@@ -104,11 +104,11 @@ const validateLineOrder = () => {
   }
 }
 
-const validateGotoDeclarations = () => {
-  const declarationsArray = Array.from(GOTO_DECLARED_LINES);
+const validateGotoDeclarations = (declaredLines, lines) => {
+  const declarationsArray = Array.from(declaredLines);
 
   declarationsArray.forEach(declaration => {
-    if(!LINES.has(declaration))
+    if(!lines.has(declaration))
       throw new Error(`Linha inexistente para declaração de GOTO: ${declaration}`)
   });
 }
@@ -117,4 +117,4 @@ const isType = (token, type) => {
   return token.type === type;
 }
 
-module.exports = { analyze }
+export { analyze }

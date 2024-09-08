@@ -140,4 +140,4 @@ const isType = (token, type) => {
   return token.type === type;
 }
 
-module.exports = { analyze }
+export { analyze }

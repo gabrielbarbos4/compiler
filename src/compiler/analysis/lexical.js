@@ -1,12 +1,11 @@
 "use strict"
-
-const { ACTIONS, OPERATORS, ignore_characters } = require("./gramatic");
-const TOKENS = new Set();
-let currentIndex = 0;
+import { ACTIONS, OPERATORS, ignore_characters } from '../gramatic.js';
 
 const analyze = (fileString) => {
+  const TOKENS = new Set();
+  let currentIndex = 0;
 
-  while(currentIndex !== fileString.length) {
+  while(currentIndex < fileString.length) {
     const character = fileString.charAt(currentIndex);
     let validated = false;
 
@@ -90,7 +89,7 @@ const analyze = (fileString) => {
     }
 
     if(!validated) 
-      throw new Error(`Não validado: ${character}, next: ${nextChar}`);
+      throw new Error(`Não validado: ${character}, next: ${nextChar}, index: ${currentIndex}`);
   }
 
   return TOKENS;
@@ -98,7 +97,6 @@ const analyze = (fileString) => {
 
 const isAction = (character, fileString, currentIndex) => {
   let possibleAction;
-
 
   possibleAction = character === "i"
     ? ACTIONS.find(action => action.value.charAt(0) === character && action.value.charAt(1) === fileString.charAt(currentIndex + 1))
@@ -158,4 +156,4 @@ const isUppercase = (character) => {
     throw new Error(`Caracter maiusculo nao eh valido`)
 }
 
-module.exports = { analyze }
+export { analyze }

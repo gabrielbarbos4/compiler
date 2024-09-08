@@ -24,4 +24,4 @@ const ACTIONS = [
   { name: "end", value: "end" }
 ]
 
-module.exports = { ignore_characters, OPERATORS, ACTIONS }
+export { ignore_characters, OPERATORS, ACTIONS }
