@@ -52,21 +52,12 @@ const analyze = (tokens) => {
       }
       case "let": {
         let nextToken = tokensArray[++currentIndex];
-        let declaredVariableInBlock;
 
-        if(!VARIABLES.has(nextToken.value)) {
-          VARIABLES.add(nextToken.value);
-          declaredVariableInBlock = nextToken;
-        }
-
-        nextToken = tokensArray[++currentIndex];
+        VARIABLES.add(nextToken.value);
 
         while(nextToken.value !== "\n") {
           if(isType(nextToken, 'variable') && !VARIABLES.has(nextToken.value))
             throw new Error(`Undeclared variable: ${nextToken.value}`);
-
-          if(declaredVariableInBlock !== undefined && nextToken.value === declaredVariableInBlock.value)
-            throw new Error(`Variable declared in expression cant be used: ${nextToken.value}`);
 
           currentIndex++;
           nextToken = tokensArray[currentIndex];
