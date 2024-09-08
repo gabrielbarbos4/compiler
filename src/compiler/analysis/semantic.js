@@ -91,14 +91,10 @@ const analyze = (tokens) => {
 
 const validateLineOrder = (lines) => {
   const linesArray = Array.from(lines);
-  const countPattern =  Math.abs(linesArray[0] - linesArray[1]);
 
   for(let i = 0; i < linesArray.length - 1; i++) {
     if(linesArray[i + 1] < linesArray[i])
       throw new Error(`Ordem de linhas não está sendo apresentada de forma crescente |  linhas analisadas: ${linesArray[i + 1]} - ${linesArray[i]}`)
-
-    if(Math.abs(linesArray[i + 1] - linesArray[i]) !== countPattern)
-      throw new Error(`Ordem de linhas não respeita o padrão: ${countPattern} | linhas analisadas: ${linesArray[i + 1]} - ${linesArray[i]}`)
   }
 }
 
