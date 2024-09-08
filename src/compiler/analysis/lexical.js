@@ -31,7 +31,7 @@ const analyze = (fileString) => {
       }
 
       if(!isIgnore(nextChar))
-        throw new Error(`Nao eh ignore char apos um numero`)
+        throw new Error(`It is not ignore char after a number`)
 
       TOKENS.add({ type: "integer", value: digit });
       currentIndex++;
@@ -48,19 +48,19 @@ const analyze = (fileString) => {
         let validChar = nextChar === " " || nextChar === "1";
 
         if(!validChar) {
-          throw new Error(`Caracter invalido a frente do sinal ${character}: ${nextChar === " "}`)
+          throw new Error(`Invalid character in front of sign ${character}: ${nextChar === " "}`)
         }
       } else {
         if(isOperator(nextChar)) {
           const nextCharNextDoubleOperator = fileString.charAt(currentIndex + 2);
 
           if(!isIgnore(nextCharNextDoubleOperator))
-            throw new Error(`Caracter inválido após operador: ${finalOperator += nextChar} | caracter: ${nextChar}`)
+            throw new Error(`Invalid character after operator: ${finalOperator += nextChar} | character: ${nextChar}`)
 
           finalOperator += nextChar;
           currentIndex += 2;
         } else if(!isIgnore(nextChar)) {
-          throw new Error(`Caracter invalido apos operador: ${nextChar}`)
+          throw new Error(`Invalid character after operator: ${nextChar} | character: ${nextChar}`)
         }
       }
 
@@ -89,7 +89,7 @@ const analyze = (fileString) => {
     }
 
     if(!validated) 
-      throw new Error(`Não validado: ${character}, next: ${nextChar}, index: ${currentIndex}`);
+      throw new Error(`Character Not validated: ${character}, next: ${nextChar}, index: ${currentIndex}`);
   }
 
   return TOKENS;
@@ -134,7 +134,7 @@ const isAction = (character, fileString, currentIndex) => {
   }
 
   if(moutedWord !== possibleAction.value || !isIgnore(fileString.charAt(currentIndex + 1)))
-    throw new Error(`Ação não presente na gramatica ${character} - ${moutedWord}`)
+    throw new Error(`Command or expression is not present in the grammar. Starting with: ${character}`)
 
   return { walkedIndexCounter, moutedWord, isAction: true }
 }
@@ -153,7 +153,7 @@ const isIgnore = (character) => {
 
 const isUppercase = (character) => {
   if(/^[A-Z]$/.test(character))
-    throw new Error(`Caracter maiusculo nao eh valido`)
+    throw new Error(`Uppercase character is not valid`)
 }
 
 export { analyze }

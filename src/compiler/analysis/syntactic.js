@@ -5,10 +5,10 @@ const analyze = (tokens) => {
   let currentIndex = 0;
 
   if(tokensArray[tokensArray.length - 1].value !== "end")
-    throw new Error("Último token não é 'end'");
+    throw new Error("Last token is not 'end'");
 
   if(!isType(tokensArray[currentIndex], 'integer'))
-    throw new Error("Primeira Linha nao iniciada com digito");
+    throw new Error("First line not starting with digit");
 
   currentIndex++;
 
@@ -16,7 +16,7 @@ const analyze = (tokens) => {
     const actualToken = tokensArray[currentIndex];
 
     if(tokensArray[currentIndex].value === "\n" && !isType(tokensArray[currentIndex + 1], 'integer'))
-      throw new Error("Linha nao iniciada com digito");
+      throw new Error("Line not starting with digit");
 
     if(isType(actualToken, 'integer')) {
       currentIndex++;
@@ -31,7 +31,7 @@ const analyze = (tokens) => {
         break;
       case "input": {
         if(!isType(tokensArray[++currentIndex], 'variable'))
-          throw new Error("token nao e variavel a frente do input");
+          throw new Error("Token is not variable in front of the input");
         currentIndex++;
         break;
       }
@@ -39,12 +39,12 @@ const analyze = (tokens) => {
         let nextToken = tokensArray[++currentIndex]
 
         if(!isType(nextToken, 'variable'))
-          throw new Error("Token nao e uma variavel apos o let");
+          throw new Error("Token is not a variable after let");
 
         nextToken = tokensArray[++currentIndex];
 
         if(nextToken.value !== "=")
-          throw new Error("Token não é um '=' após a variável");
+          throw new Error("Token is not a '=' after the variable");
 
         let pairAuxArray = [];
 
@@ -58,7 +58,7 @@ const analyze = (tokens) => {
         for(let i = 0; i < pairAuxArray.length; i += 2) {
           if(pairAuxArray[i + 1].value === "-") {
             if(pairAuxArray[i + 2].value !== "1")
-              throw new Error("Pilha de tokens invalida para operacao let com operador negativo")
+              throw new Error("Invalid token stack for let operation with negative operator")
 
             i++;
           } else {
@@ -71,7 +71,7 @@ const analyze = (tokens) => {
             }
 
             if(!(isOperator && isArithmeticOperator && (isType(pairAuxArray[i + 1], 'variable') || isType(pairAuxArray[i + 1], 'integer'))))
-              throw new Error(`Pilha de tokens inválida para operacao let: valores analisados ${pairAuxArray[i].value} | ${pairAuxArray[i + 1].value}`)
+              throw new Error(`Invalid token stack for 'let' operation. Values analyzed: ${pairAuxArray[i].value} | ${pairAuxArray[i + 1].value}`)
           }
         }
 
@@ -82,7 +82,7 @@ const analyze = (tokens) => {
         const nextToken = tokensArray[++currentIndex];
 
         if(!isType(nextToken, 'variable'))
-          throw new Error(`Token após acao print não é válido: ${nextToken.value}`)
+          throw new Error(`Token after print action is not valid: ${nextToken.value}`)
 
         currentIndex++;
         break;
@@ -91,12 +91,12 @@ const analyze = (tokens) => {
         let nextToken = tokensArray[++currentIndex];
 
         if(!isType(nextToken, 'integer'))
-          throw new Error(`Token após goto não é um inteiro: ${nextToken.value}`);
+          throw new Error(`Token after goto is not an integer: ${nextToken.value}`);
 
         nextToken = tokensArray[++currentIndex]
 
         if(nextToken.value !== "\n")
-          throw new Error(`Token após declaração de goto não é um '\\n': ${nextToken.value}`);
+          throw new Error(`Token after goto statement is not a '\\n'': ${nextToken.value}`);
 
         break;
       }
@@ -104,17 +104,17 @@ const analyze = (tokens) => {
         let nextToken = tokensArray[++currentIndex]
 
         if(!(isType(nextToken, 'integer') || isType(nextToken, 'variable')))
-          throw new Error(`Primeiro token após if não é uma variável ou um inteiro: ${nextToken.value}`);
+          throw new Error(`First token after 'if' is not a variable or an integer: ${nextToken.value}`);
 
         nextToken = tokensArray[++currentIndex];
 
         if(!isType(nextToken, 'operator'))
-          throw new Error(`Segundo token após if não é um operador: ${nextToken.value}`);
+          throw new Error(`Second token after 'if' is not an operator: ${nextToken.value}`);
 
         nextToken = tokensArray[++currentIndex];
 
         if(!(isType(nextToken, 'integer') || isType(nextToken, 'variable')))
-          throw new Error(`Terceiro token após if não é uma variável ou um inteiro: ${nextToken.value}`);
+          throw new Error(`Third token after 'if' is not a variable or an integer: ${nextToken.value}`);
 
         currentIndex++;
         break;

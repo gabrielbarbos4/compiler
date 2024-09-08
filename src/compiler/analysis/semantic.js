@@ -28,7 +28,7 @@ const analyze = (tokens) => {
         const nextToken = tokensArray[++currentIndex];
 
         if(isType(nextToken, 'variable') && !VARIABLES.has(nextToken.value))
-          throw new Error(`Variável não declarada: ${nextToken.value}`);
+          throw new Error(`Undeclared variable: ${nextToken.value}`);
 
         currentIndex++;
         break;
@@ -38,7 +38,7 @@ const analyze = (tokens) => {
 
         while(nextToken.value !== "\n") {
           if(isType(nextToken, 'variable') && !VARIABLES.has(nextToken.value))
-            throw new Error(`Variável não declarada: ${nextToken.value}`);
+            throw new Error(`Undeclared variable: ${nextToken.value}`);
 
           if(nextToken.value === "goto")
             GOTO_DECLARED_LINES.add(Number(tokensArray[currentIndex + 1].value))
@@ -59,7 +59,7 @@ const analyze = (tokens) => {
 
         while(nextToken.value !== "\n") {
           if(isType(nextToken, 'variable') && !VARIABLES.has(nextToken.value))
-            throw new Error(`Variável não declarada: ${nextToken.value}`);
+            throw new Error(`Undeclared variable: ${nextToken.value}`);
 
           currentIndex++;
           nextToken = tokensArray[currentIndex];
@@ -94,7 +94,7 @@ const validateLineOrder = (lines) => {
 
   for(let i = 0; i < linesArray.length - 1; i++) {
     if(linesArray[i + 1] < linesArray[i])
-      throw new Error(`Ordem de linhas não está sendo apresentada de forma crescente |  linhas analisadas: ${linesArray[i + 1]} - ${linesArray[i]}`)
+      throw new Error(`Line order is not being displayed in ascending order | lines analyzed: ${linesArray[i + 1]} - ${linesArray[i]}`)
   }
 }
 
@@ -103,7 +103,7 @@ const validateGotoDeclarations = (declaredLines, lines) => {
 
   declarationsArray.forEach(declaration => {
     if(!lines.has(declaration))
-      throw new Error(`Linha inexistente para declaração de GOTO: ${declaration}`)
+      throw new Error(`Nonexistent line for GOTO declaration: ${declaration}`)
   });
 }
 

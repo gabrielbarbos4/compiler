@@ -22,6 +22,6 @@ const ACTIONS = [
   { name: "if", value: "if" },
   { name: "enter", value: "\n" },
   { name: "end", value: "end" }
-]
+];
 
 export { ignore_characters, OPERATORS, ACTIONS }
