@@ -1,6 +1,6 @@
 "use strict"
 
-import { ACTIONS, COMPARISON_OPERATORS } from "../gramatic.js";
+import { COMMANDS, ARITHMETIC_OPERATORS, COMPARISON_OPERATORS } from "../gramatic.js";
 
 const analyze = (tokens) => {
   const tokensArray = Array.from(tokens);
@@ -142,15 +142,13 @@ const isComparisonOperator = (value) => {
 }
 
 const isOperation = (value) => {
-  return ACTIONS.filter(command => command.name !== "enter").find(command => command.value === value) !== undefined;
+  return COMMANDS.filter(command => command.name !== "enter").find(command => command.value === value) !== undefined;
 }
 
 const isArithmeticOperators = (value) => {
-  return value === "-"
-    || value === "+"
-    || value === "*"
-    || value === "/"
-    || value === "%"
+  return ARITHMETIC_OPERATORS
+    .filter(operator => operator.value !== "=")
+    .find(operator => operator.value === value) !== undefined;
 }
 
 const isType = (token, type) => {

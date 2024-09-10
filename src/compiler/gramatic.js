@@ -1,4 +1,4 @@
-const ignore_characters = [" ", "\t", "\r", "\n"];
+const IGNORE_CHARACTERS = [" ", "\t", "\r", "\n"];
 const COMPARISON_OPERATORS = [
   { name: "eq", value: "==" },
   { name: "ne", value: "!=" },
@@ -7,16 +7,19 @@ const COMPARISON_OPERATORS = [
   { name: "ge", value: ">=" },
   { name: "le", value: "<=" },
 ]
-const OPERATORS = [
-  ...COMPARISON_OPERATORS,
-  { name: "assignment", value: "=" },
+const ARITHMETIC_OPERATORS = [
   { name: "add", value: "+" },
   { name: "subtract", value: "-" },
   { name: "multiply", value: "*" },
   { name: "divide", value: "/" },
   { name: "modulo", value: "%" },
+  { name: "assignment", value: "=" },
+]
+const OPERATORS = [
+  ...COMPARISON_OPERATORS,
+  ...ARITHMETIC_OPERATORS,
 ];
-const ACTIONS = [
+const COMMANDS = [
   { name: "rem", value: "rem" },
   { name: "input", value: "input" },
   { name: "let", value: "let" },
@@ -27,4 +30,4 @@ const ACTIONS = [
   { name: "end", value: "end" }
 ];
 
-export { ignore_characters, OPERATORS, ACTIONS, COMPARISON_OPERATORS }
+export { IGNORE_CHARACTERS, OPERATORS, COMMANDS, COMPARISON_OPERATORS, ARITHMETIC_OPERATORS }

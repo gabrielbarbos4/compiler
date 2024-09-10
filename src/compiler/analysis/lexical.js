@@ -1,5 +1,5 @@
 "use strict"
-import { ACTIONS, OPERATORS, ignore_characters } from '../gramatic.js';
+import { COMMANDS, OPERATORS, IGNORE_CHARACTERS } from '../gramatic.js';
 
 const analyze = (fileString) => {
   const TOKENS = new Set();
@@ -102,8 +102,8 @@ const isAction = (character, fileString, currentIndex) => {
   let possibleAction;
 
   possibleAction = character === "i"
-    ? ACTIONS.find(action => action.value.charAt(0) === character && action.value.charAt(1) === fileString.charAt(currentIndex + 1))
-    : ACTIONS.find(action => action.value.charAt(0) === character)
+    ? COMMANDS.find(action => action.value.charAt(0) === character && action.value.charAt(1) === fileString.charAt(currentIndex + 1))
+    : COMMANDS.find(action => action.value.charAt(0) === character)
 
   if(!possibleAction) return { isAction: false }
 
@@ -148,7 +148,7 @@ const isDigit = (character) => {
 }
 
 const isIgnore = (character) => {
-  return ignore_characters.find(c => c === character) !== undefined 
+  return IGNORE_CHARACTERS.find(c => c === character) !== undefined
 }
 
 const isUppercase = (character) => {
