@@ -1,5 +1,7 @@
 "use strict"
 
+import { ACTIONS, COMPARISON_OPERATORS } from "../gramatic.js";
+
 const analyze = (tokens) => {
   const tokensArray = Array.from(tokens);
   let currentIndex = 0;
@@ -19,6 +21,9 @@ const analyze = (tokens) => {
       throw new Error("Line not starting with digit");
 
     if(isType(actualToken, 'integer')) {
+      if(!isOperation(tokensArray[currentIndex + 1].value))
+        throw new Error(`Line not starting with a command. index: ${currentIndex} | character: ${tokensArray[currentIndex + 1].value}`);
+
       currentIndex++;
     }
 
@@ -27,6 +32,12 @@ const analyze = (tokens) => {
         currentIndex++;
         break;
       case "rem":
+        let nextToken = tokensArray[++currentIndex]
+
+        while(nextToken.value !== "\n") {
+          nextToken = tokensArray[++currentIndex];
+        }
+
         currentIndex++;
         break;
       case "input": {
@@ -108,8 +119,8 @@ const analyze = (tokens) => {
 
         nextToken = tokensArray[++currentIndex];
 
-        if(!isType(nextToken, 'operator'))
-          throw new Error(`Second token after 'if' is not an operator: ${nextToken.value}`);
+        if(!isComparisonOperator(nextToken.value))
+          throw new Error(`Second token after 'if' is not an comparison operator: ${nextToken.value}`);
 
         nextToken = tokensArray[++currentIndex];
 
@@ -124,6 +135,14 @@ const analyze = (tokens) => {
       }
     }
   }
+}
+
+const isComparisonOperator = (value) => {
+  return COMPARISON_OPERATORS.find(operator => operator.value === value) !== undefined;
+}
+
+const isOperation = (value) => {
+  return ACTIONS.filter(command => command.name !== "enter").find(command => command.value === value) !== undefined;
 }
 
 const isArithmeticOperators = (value) => {

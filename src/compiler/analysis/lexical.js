@@ -5,7 +5,7 @@ const analyze = (fileString) => {
   const TOKENS = new Set();
   let currentIndex = 0;
 
-  while(currentIndex < fileString.length) {
+  while(currentIndex !== fileString.length) {
     const character = fileString.charAt(currentIndex);
     let validated = false;
 
@@ -88,10 +88,13 @@ const analyze = (fileString) => {
       validated = true;
     }
 
-    if(!validated) 
+    if(!validated) {
+      console.log(TOKENS)
       throw new Error(`Character Not validated: ${character}, next: ${nextChar}, index: ${currentIndex}`);
+    }
   }
 
+  console.log("pass lexical")
   return TOKENS;
 }
 
@@ -119,13 +122,10 @@ const isAction = (character, fileString, currentIndex) => {
   walkedIndexCounter++;
 
   if(moutedWord === "rem") {
-    let currentIndexAux = walkedIndexCounter;
-    let nextChar = fileString.charAt(currentIndexAux);
+    let nextChar = fileString.charAt(walkedIndexCounter + currentIndex);
 
     while(nextChar !== "\n") {
-      currentIndexAux++;
-      walkedIndexCounter++;
-      nextChar = fileString.charAt(currentIndexAux);
+      nextChar = fileString.charAt(++walkedIndexCounter + currentIndex);
     }
   }
 

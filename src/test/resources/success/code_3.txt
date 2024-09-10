@@ -6,6 +6,7 @@
 35 input b
 40 if a >= b goto 25
 45 let a = b
+49 rem erro semantico
 50 goto 25
 55 let a = -1
 60 print a
