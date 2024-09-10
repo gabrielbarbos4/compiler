@@ -21,7 +21,7 @@ const analyze = (tokens) => {
       throw new Error("Line not starting with digit");
 
     if(isType(actualToken, 'integer')) {
-      if(!isOperation(tokensArray[currentIndex + 1].value))
+      if(!isCommand(tokensArray[currentIndex + 1].value))
         throw new Error(`Line not starting with a command. index: ${currentIndex} | character: ${tokensArray[currentIndex + 1].value}`);
 
       currentIndex++;
@@ -141,7 +141,7 @@ const isComparisonOperator = (value) => {
   return COMPARISON_OPERATORS.find(operator => operator.value === value) !== undefined;
 }
 
-const isOperation = (value) => {
+const isCommand = (value) => {
   return COMMANDS.filter(command => command.name !== "enter").find(command => command.value === value) !== undefined;
 }
 
