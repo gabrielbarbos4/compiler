@@ -66,6 +66,9 @@ const analyze = (tokens) => {
           nextToken = tokensArray[currentIndex];
         }
 
+        if(pairAuxArray.length > 4)
+          throw new Error("Invalid simple operation")
+
         for(let i = 0; i < pairAuxArray.length; i += 2) {
           if(pairAuxArray[i + 1].value === "-") {
             if(pairAuxArray[i + 2].value !== "1")
