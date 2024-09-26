@@ -133,7 +133,7 @@ function executeGoto(line) {
   console.log('Executando comando: goto');
 
   //TODO add goto to specific memory location
-  pushInstruction(operations.BRANCHZERO, line[1]);
+  pushInstruction(operations.BRANCH, line[1]);
 }
 
 function executeLet(line) {
