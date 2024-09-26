@@ -1,5 +1,3 @@
-import fs from "fs";
-
 const operations = {
   READ: 10,
   WRITE: 11,
@@ -17,7 +15,6 @@ const operations = {
 };
 const instructions = [];
 const variables = {};
-// TODO remove -1 from initial value
 const constants = {};
 const memory = {}
 
