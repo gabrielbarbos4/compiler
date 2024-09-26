@@ -67,7 +67,6 @@ function executeIfGoto(line) {
   let gotoLine = line[5];
   let secondTermAddress;
 
-  // se nao for uma variavel vai allocar a constante e buscar o valor em memoria | se nao vai buscar nas variaveis
   if(!isCharacter(firstTerm)) {
     allocateConstant(firstTerm);
     pushInstruction(operations.LOAD, constants[firstTerm].address);
@@ -82,7 +81,7 @@ function executeIfGoto(line) {
     secondTermAddress = variables[secondTerm].address;
   }
 
-  //TODO colocar goto para linha especifica
+  //TODO add goto to specific memory location
 
   if(operator === `<`) {
     pushInstruction(operations.SUBTRACT, secondTermAddress);
@@ -132,7 +131,7 @@ function executePrint(line) {
 function executeGoto(line) {
   console.log('Executando comando: goto');
 
-  //TODO colocar goto para linha especifica [posicao de memoria especifica]
+  //TODO add goto to specific memory location
   pushInstruction(operations.BRANCHZERO, line[1]);
 }
 
