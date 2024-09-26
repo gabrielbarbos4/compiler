@@ -17,6 +17,7 @@ const operations = {
 };
 const instructions = [];
 const variables = {};
+// TODO remove -1 from initial value
 const constants = { '-1': { value: -1, address: 99 } };
 const memory = {}
 
@@ -209,6 +210,10 @@ const execute = (code) => {
   const lines = code.split('\n').map(line => line.trim()).filter(line => line.length > 0);
 
   lines.forEach(line => analyzeLine(line.split(" ").slice(1)));
+
+  // TODO review, check if the number can be bigger than 99
+  Object.keys(constants).forEach(k => instructions.push(`${k < 0 ? '-' : '+'}00${k < 10 ? '0' + Math.abs(k) : k}`));
+  Object.keys(variables).forEach(k => instructions.push("+0000"));
 
   console.table(instructions);
 }
