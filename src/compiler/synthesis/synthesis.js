@@ -18,7 +18,7 @@ const operations = {
 const instructions = [];
 const variables = {};
 // TODO remove -1 from initial value
-const constants = { '-1': { value: -1, address: 99 } };
+const constants = {};
 const memory = {}
 
 let nextVariableAddress = 10;
@@ -66,52 +66,49 @@ function executeIfGoto(line) {
   let operator = line[2];
   let secondTerm = line[3];
   let gotoLine = line[5];
-  let secondTermAddress;
 
-  if(!isCharacter(firstTerm)) {
-    allocateConstant(firstTerm);
-    pushInstruction(operations.LOAD, constants[firstTerm].address);
-  } else {
-    pushInstruction(operations.LOAD, variables[firstTerm].address);
-  }
+  allocateAny(firstTerm)
+  allocateAny(secondTerm)
 
-  if(!isCharacter(secondTerm)) {
-    allocateConstant(secondTerm);
-    secondTermAddress = constants[secondTerm].address;
-  } else {
-    secondTermAddress = variables[secondTerm].address;
-  }
+  const firsTermAddress = isCharacter(firstTerm) ? variables[firstTerm].address : constants[firstTerm].address
+  const secondTermAddress = isCharacter(firstTerm) ? variables[firstTerm].address : constants[firstTerm].address
 
   //TODO add goto to specific memory location
 
   if(operator === `<`) {
+    pushInstruction(operations.LOAD, firsTermAddress);
     pushInstruction(operations.SUBTRACT, secondTermAddress);
     pushInstruction(operations.BRANCHNEG, gotoLine);
   }
   if(operator === `<=`) {
+    pushInstruction(operations.LOAD, firsTermAddress);
     pushInstruction(operations.SUBTRACT, secondTermAddress);
     pushInstruction(operations.BRANCHZERO, gotoLine);
     pushInstruction(operations.BRANCHNEG, gotoLine);
   }
   if(operator === `>`) {
-    pushInstruction(operations.SUBTRACT, secondTermAddress);
-    pushInstruction(operations.MULTIPLY, 99);
+    pushInstruction(operations.LOAD, secondTermAddress);
+    pushInstruction(operations.SUBTRACT, firsTermAddress);
     pushInstruction(operations.BRANCHNEG, gotoLine);
   }
   if(operator === `>=`) {
-    pushInstruction(operations.SUBTRACT, secondTermAddress);
+    pushInstruction(operations.LOAD, secondTermAddress);
+    pushInstruction(operations.SUBTRACT, firsTermAddress);
     pushInstruction(operations.BRANCHZERO, gotoLine);
-    pushInstruction(operations.MULTIPLY, 99);
     pushInstruction(operations.BRANCHNEG, gotoLine);
   }
   if(operator === `==`) {
+    pushInstruction(operations.LOAD, firsTermAddress);
     pushInstruction(operations.SUBTRACT, secondTermAddress);
     pushInstruction(operations.BRANCHZERO, gotoLine);
   }
   if(operator === `!=`) {
+    pushInstruction(operations.LOAD, firsTermAddress);
     pushInstruction(operations.SUBTRACT, secondTermAddress);
     pushInstruction(operations.BRANCHNEG, gotoLine);
-    pushInstruction(operations.MULTIPLY, 99);
+
+    pushInstruction(operations.LOAD, secondTermAddress);
+    pushInstruction(operations.SUBTRACT, firstTerm);
     pushInstruction(operations.BRANCHNEG, gotoLine);
   }
 }
