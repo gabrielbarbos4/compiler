@@ -1,3 +1,6 @@
+import * as path from "path";
+import * as fs from "fs";
+
 const operations = {
   READ: 10,
   WRITE: 11,
@@ -13,10 +16,11 @@ const operations = {
   BRANCHZERO: 42,
   HALT: 43
 };
-const instructions = [];
+let lineEquivalence = [];
+let instructions = [];
 const variables = {};
 const constants = {};
-const memory = {}
+const memory = {};
 
 let nextVariableAddress = 10;
 let nextConstantAddress = 80;
@@ -146,6 +150,7 @@ function executeLet(line) {
   const secondVariableAddress = isCharacter(secondTerm) ? variables[secondTerm].address : constants[secondTerm].address;
 
   if(line.length === 4) {
+    // TODO verificar se é possivel fazer isso ou a variável 2 deve ser somada no acumulador
     pushInstruction(operations.LOAD, secondVariableAddress);
     pushInstruction(operations.STORE, firstVariableAddress);
 
@@ -200,16 +205,62 @@ function analyzeLine(line) {
   }
 }
 
-const execute = (code) => {
+function applyGotoValues() {
+  instructions = instructions.map(instruction => {
+    if(
+      instruction.startsWith('+40') ||
+      instruction.startsWith('+41') ||
+      instruction.startsWith('+42')
+    ) {
+      const command = instruction.slice(0, 3);
+      const gotoLine = instruction.slice(3, 5);
+      const equivalentLine = lineEquivalence.find(line => line.simpleLine == gotoLine).simpletronLine;
+
+      return command + (equivalentLine < 10 ? `0${equivalentLine}` : equivalentLine)
+    }
+
+    return instruction;
+  });
+}
+
+function writeArrayToFile(array, filename) {
+  try {
+    const resourcesPath = path.join('src', 'resources');
+
+    if (!fs.existsSync(resourcesPath)) {
+      fs.mkdirSync(resourcesPath, { recursive: true });
+    }
+
+    const filePath = path.join(resourcesPath, filename);
+    const data = array.join('\n');
+
+    fs.writeFileSync(filePath, data, 'utf8');
+
+    console.log(`File: '${filename}' saved in: '${resourcesPath}'.`);
+  } catch (error) {
+    console.error('Error to write: ', error);
+  }
+}
+
+const execute = async (code) => {
   const lines = code.split('\n').map(line => line.trim()).filter(line => line.length > 0);
 
-  lines.forEach(line => analyzeLine(line.split(" ").slice(1)));
+  lines.forEach(line => {
+    const lineArray = line.split(" ");
 
-  // TODO review, check if the number can be bigger than 99
+    lineEquivalence.push({
+      simpleLine: Number(lineArray[0]),
+      simpletronLine: instructions.length + 1
+    });
+    analyzeLine(lineArray.slice(1));
+  });
+
   Object.keys(constants).forEach(k => instructions.push(`${k < 0 ? '-' : '+'}00${k < 10 ? '0' + Math.abs(k) : k}`));
   Object.keys(variables).forEach(k => instructions.push("+0000"));
 
-  console.table(instructions);
+  applyGotoValues();
+
+  await writeArrayToFile(instructions, 'synthesis-result.txt');
 }
 
 export { execute }
