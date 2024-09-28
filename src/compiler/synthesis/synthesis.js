@@ -16,12 +16,12 @@ const operations = {
   BRANCHZERO: 42,
   HALT: 43
 };
-let lineEquivalence = [];
-let instructions = [];
 const variables = {};
 const constants = {};
 const memory = {};
 
+let lineEquivalence = [];
+let instructions = [];
 let nextVariableAddress = 10;
 let nextConstantAddress = 80;
 
